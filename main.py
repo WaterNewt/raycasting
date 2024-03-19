@@ -12,11 +12,14 @@ fps = 60
 fpsClock = pygame.time.Clock()
 
 width, height = 1280, 720
-screen = pygame.display.set_mode((width, height))
+screen = pygame.display.set_mode((width, height), DOUBLEBUF | HWSURFACE)
 
 boundaries = []
 ray_length = 50
 show = True
+
+MAX_TRAIL_LENGTH = 5
+trail = []
 
 
 def point_dist(x1, y1, x2, y2):
@@ -53,11 +56,22 @@ while True:
         if event.type == KEYDOWN:
             show = not show
 
-    pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 30)
+    trail.insert(0, pygame.mouse.get_pos())
+    trail = trail[:MAX_TRAIL_LENGTH]
+
+    for i, pos in enumerate(trail):
+        alpha = int(255 * (1 - i / MAX_TRAIL_LENGTH))
+        blur_surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        pygame.draw.circle(blur_surface, (255, 255, 255, alpha), pos, 30)
+        screen.blit(blur_surface, (0, 0))
+
+    if len(trail) > 1:
+        pygame.draw.line(screen, (255, 255, 255), trail[0], trail[1], width=5)
+
     ray_start = pygame.mouse.get_pos()
 
     mouse_x, mouse_y = pygame.mouse.get_pos()
-    for angle in range(0, 360, 1):
+    for angle in range(0, 360, 11):
         angle_rad = math.radians(angle)
         dx = math.cos(angle_rad)
         dy = math.sin(angle_rad)
