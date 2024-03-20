@@ -38,8 +38,8 @@ def generate_boundaries():
         ((width, height), (0, height)),
         ((0, height), (0, 0))
     )
-    for i in border_boundary:
-        boundaries.append(Wall(i[0], i[1]))
+    for border in border_boundary:
+        boundaries.append(Wall(border[0], border[1]))
 
     for _ in range(5):
         start = (random.randint(0, 1280), random.randint(0, 720))
