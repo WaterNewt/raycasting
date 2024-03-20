@@ -5,6 +5,7 @@ class Ray:
     def __init__(self, start, end):
         self.start = start
         self.end = end
+        self.intersecting_walls = []
 
     def cast(self, walls):
         record = float('inf')
@@ -32,6 +33,7 @@ class Ray:
                 intersecting = 0 < t < 1 and u > 0
 
                 if intersecting:
+                    self.intersecting_walls.append(wall)
                     px, py = x1 + t * (x2 - x1), y1 + t * (y2 - y1)
                     d = self.point_dist(px, py)
                     if d < record:
