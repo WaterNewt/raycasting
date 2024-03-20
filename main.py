@@ -57,6 +57,8 @@ while True:
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+        if event.type == MOUSEBUTTONDOWN:
+            print(pygame.mouse.get_pos())
         if event.type == KEYDOWN:
             show = not show
 
