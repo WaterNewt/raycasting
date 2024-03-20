@@ -1,0 +1,6 @@
+{
+  "fps": 60,
+  "size": [1280, 720],
+  "motion_blur": 5,
+  "ray_length": 50
+}

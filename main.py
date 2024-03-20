@@ -5,20 +5,24 @@ import random
 from pygame.locals import *
 from ray import Ray
 from walls import Wall
+import json
 
 pygame.init()
 
-fps = 60
+config_file = "config.json"
+with open(config_file, 'r') as f:
+    config = json.load(f)
+fps = config['fps']
 fpsClock = pygame.time.Clock()
 
-width, height = 1280, 720
+width, height = config['size']
 screen = pygame.display.set_mode((width, height), DOUBLEBUF | HWSURFACE)
 
 boundaries = []
-ray_length = 50
+ray_length = config['ray_length']
 show = True
 
-MAX_TRAIL_LENGTH = 5
+MAX_TRAIL_LENGTH = config['motion_blur']
 trail = []
 
 
