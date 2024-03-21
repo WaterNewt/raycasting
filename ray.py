@@ -12,6 +12,7 @@ class Ray:
         closest = None
 
         for wall in walls:
+            wall.intersecting = False
             x1, y1 = wall.start
             x2, y2 = wall.end
 
@@ -33,6 +34,7 @@ class Ray:
                 intersecting = 0 < t < 1 and u > 0
 
                 if intersecting:
+                    wall.intersecting = True
                     self.intersecting_walls.append(wall)
                     px, py = x1 + t * (x2 - x1), y1 + t * (y2 - y1)
                     d = self.point_dist(px, py)

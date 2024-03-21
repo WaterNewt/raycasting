@@ -16,7 +16,8 @@ fps = config['fps']
 fpsClock = pygame.time.Clock()
 
 width, height = config['size']
-screen = pygame.display.set_mode((width, height), DOUBLEBUF | HWSURFACE)
+flags = HWSURFACE | DOUBLEBUF | SCALED | SRCALPHA
+screen = pygame.display.set_mode((width, height), flags)
 
 boundaries = []
 ray_length = config['ray_length']
@@ -24,6 +25,11 @@ show = True
 
 MAX_TRAIL_LENGTH = config['motion_blur']
 trail = []
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+font = pygame.sysfont.SysFont("helvetica", 50)
 
 
 def point_dist(x1, y1, x2, y2):
@@ -49,9 +55,10 @@ def generate_boundaries():
 
 generate_boundaries()
 
-
 while True:
-    screen.fill((0, 0, 0))
+    screen.fill(BLACK)
+    text = font.render("FPS: {:.2f}".format(fpsClock.get_fps()), True, WHITE)
+    screen.blit(text, (10, 10))
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -60,24 +67,28 @@ while True:
         if event.type == MOUSEBUTTONDOWN:
             print(pygame.mouse.get_pos())
         if event.type == KEYDOWN:
-            show = not show
+            if event.key == K_RETURN:
+                show = not show
+            if event.key == K_q:
+                pygame.quit()
+                sys.exit()
 
     trail.insert(0, pygame.mouse.get_pos())
     trail = trail[:MAX_TRAIL_LENGTH]
 
     for i, pos in enumerate(trail):
         alpha = int(255 * (1 - i / MAX_TRAIL_LENGTH))
-        blur_surface = pygame.Surface((width, height), pygame.SRCALPHA)
-        pygame.draw.circle(blur_surface, (255, 255, 255, alpha), pos, 30)
+        blur_surface = pygame.Surface((width, height), SRCALPHA)
+        pygame.draw.circle(blur_surface, (*WHITE, alpha), pos, 30)
         screen.blit(blur_surface, (0, 0))
 
     if len(trail) > 1:
-        pygame.draw.line(screen, (255, 255, 255), trail[0], trail[1], width=5)
+        pygame.draw.line(screen, WHITE, trail[0], trail[1], width=5)
 
     ray_start = pygame.mouse.get_pos()
 
     mouse_x, mouse_y = pygame.mouse.get_pos()
-    for angle in range(0, 360, 11):
+    for angle in range(0, 360, 10):
         angle_rad = math.radians(angle)
         dx = math.cos(angle_rad)
         dy = math.sin(angle_rad)
@@ -89,10 +100,11 @@ while True:
         closest = ray.cast(boundaries)
 
         if closest and show:
-            pygame.draw.line(screen, (255, 255, 255), ray_start, closest)
+            pygame.draw.line(screen, WHITE, ray_start, closest)
 
     for boundary in boundaries:
-        pygame.draw.line(screen, (255, 255, 255), boundary.start, boundary.end)
+        pygame.draw.line(screen, WHITE, boundary.start, boundary.end)
 
     pygame.display.flip()
-    fpsClock.tick(fps)
+    if fps is not None:
+        fpsClock.tick(fps)
