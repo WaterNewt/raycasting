@@ -10,20 +10,23 @@ import json
 pygame.init()
 
 config_file = "config.json"
-with open(config_file, 'r') as f:
-    config = json.load(f)
-fps = config['fps']
+try:
+    with open(config_file, 'r') as f:
+        config = json.load(f)
+    fps = config['fps']
+    width, height = config['size']
+    ray_length = config['ray_length']
+    MAX_TRAIL_LENGTH = config['motion_blur']
+except FileNotFoundError:
+    fps = 60
+    width, height = 1280, 720
+    ray_length = 50
+    MAX_TRAIL_LENGTH = 3
 fpsClock = pygame.time.Clock()
-
-width, height = config['size']
 flags = HWSURFACE | DOUBLEBUF | SCALED | SRCALPHA
 screen = pygame.display.set_mode((width, height), flags)
-
 boundaries = []
-ray_length = config['ray_length']
 show = True
-
-MAX_TRAIL_LENGTH = config['motion_blur']
 trail = []
 
 WHITE = (255, 255, 255)

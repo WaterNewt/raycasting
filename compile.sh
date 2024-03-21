@@ -26,7 +26,7 @@ else
 fi
 
 # Set script file
-SCRIPT_FILE="onefile.py"
+SCRIPT_FILE="main.py"
 
 # Run PyInstaller
 pyinstaller --windowed --icon "$ICON_FILE" --name RayCast --upx-dir "$UPX_DIR" --clean --add-data "$ICON_FILE:." --noconfirm "$SCRIPT_FILE"
