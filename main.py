@@ -48,8 +48,8 @@ def generate_boundaries():
         boundaries.append(Wall(border[0], border[1]))
 
     for _ in range(5):
-        start = (random.randint(0, 1280), random.randint(0, 720))
-        end = (random.randint(0, 1280), random.randint(0, 720))
+        start = (random.randint(0, width), random.randint(0, height))
+        end = (random.randint(0, width), random.randint(0, height))
         boundaries.append(Wall(start, end))
 
 
