@@ -2,12 +2,22 @@ import math
 
 
 class Ray:
-    def __init__(self, start, end):
+    def __init__(self, start, end) -> None:
+        """
+        Initialize the ray line
+        :param start: The start position of the ray line
+        :param end: The end position of the ray line
+        """
         self.start = start
         self.end = end
         self.intersecting_walls = []
 
-    def cast(self, walls):
+    def cast(self, walls) -> tuple[float, float] | None:
+        """
+        Cast the rays to the walls and check for intersection
+        :param walls: The walls for the ray to cast
+        :return: Returns position of the closest intersection. Returns None, if no intersection
+        """
         record = float('inf')
         closest = None
 
@@ -21,9 +31,7 @@ class Ray:
 
             den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
 
-            if den == 0:
-                intersecting = False
-            else:
+            if den != 0:
                 try:
                     t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den
                     u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den
@@ -44,5 +52,11 @@ class Ray:
 
         return closest
 
-    def point_dist(self, px, py):
+    def point_dist(self, px, py) -> float:
+        """
+        Distance between two points
+        :param px: The x point
+        :param py: The y point
+        :return: Returns the distance
+        """
         return math.sqrt((self.start[0] - px) ** 2 + (self.start[1] - py) ** 2)
