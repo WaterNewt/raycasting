@@ -3,7 +3,7 @@ A raycast simulation written in PyGame, Python
 
 ## Setup
 1. Install the required libraries: `pip3 install -r requirements.txt`
-2. Cythonize the class files: `cythonize -i ray.pyx && cythonize -i walls.pyx`
+2. Run setup file to cythonize class files: `python3 setup.py build_ext --inplace`
 3. Run `main.py`: `python3 main.py`
 
 ## Screenshots
