@@ -29,6 +29,8 @@ fi
 SCRIPT_FILE="main.py"
 
 # Run PyInstaller
+cythonize -i ray.pyx
+cythonize -i walls.pyx
 pyinstaller --windowed --icon "$ICON_FILE" --name RayCast --upx-dir "$UPX_DIR" --clean --add-data "$ICON_FILE:." --noconfirm "$SCRIPT_FILE"
 exit_code=$?
 

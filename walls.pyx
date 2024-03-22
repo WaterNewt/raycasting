@@ -14,4 +14,5 @@ class Wall:
         Representation magic method
         :return: Returns the representation string
         """
-        return f"{str(self.__class__.__name__)}(start={str(self.start)}, end={str(self.end)}, intersecting={str(self.intersecting)})"
+        return "{}(start={}, end={}, intersecting={})".format(self.__class__.__name__, str(self.start), str(self.end), str(self.intersecting)).encode('utf-8')
+
