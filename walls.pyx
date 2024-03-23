@@ -1,9 +1,5 @@
-cdef class Wall:
-    cdef tuple start
-    cdef tuple end
-    cdef bint intersecting
-
-    def __cinit__(self, start, end):
+class Wall:
+    def __init__(self, start, end) -> None:
         """
         Initialize a wall line
         :param start: The start position of the wall line
@@ -13,7 +9,7 @@ cdef class Wall:
         self.end = end
         self.intersecting = False
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Representation magic method
         :return: Returns the representation string
