@@ -1,8 +1,11 @@
 import math
 
+cdef class Ray:
+    cdef tuple start
+    cdef tuple end
+    cdef list intersecting_walls
 
-class Ray:
-    def __init__(self, start, end) -> None:
+    def __cinit__(self, start, end):
         """
         Initialize the ray line
         :param start: The start position of the ray line
@@ -12,14 +15,18 @@ class Ray:
         self.end = end
         self.intersecting_walls = []
 
-    def cast(self, walls) -> tuple[float, float] | None:
+    cpdef cast(self, walls):
         """
         Cast the rays to the walls and check for intersection
         :param walls: The walls for the ray to cast
         :return: Returns position of the closest intersection. Returns None, if no intersection
         """
-        record = float('inf')
-        closest = None
+        cdef float record = float('inf')
+        cdef tuple closest = None
+
+        cdef float x1, y1, x2, y2, x3, y3, x4, y4
+        cdef float den, t, u, px, py, d
+        cdef bint intersecting
 
         for wall in walls:
             wall.intersecting = False
@@ -52,7 +59,7 @@ class Ray:
 
         return closest
 
-    def point_dist(self, px, py) -> float:
+    cpdef point_dist(self, float px, float py):
         """
         Distance between two points
         :param px: The x point
