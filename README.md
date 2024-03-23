@@ -6,6 +6,10 @@ A raycast simulation written in PyGame, Python
 2. Run setup file to cythonize class files: `python3 setup.py build_ext --inplace`
 3. Run `main.py`: `python3 main.py`
 
+## Build
+1. Run the invoke script: `invoke build`
+2. Run the clean script: `invoke clean`
+
 ## Screenshots
 <img src=".github/images/screenshot0.png" width="400"/></img>
 <img src=".github/images/screenshot1.png" width="400"/></img>
