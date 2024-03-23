@@ -1,8 +1,8 @@
 import sys
 import os
 import unittest
-os.system("cythonize -i walls.pyx")
-os.system("cythonize -i ray.pyx")
+os.system("cythonize -i ../walls.pyx")
+os.system("cythonize -i ../ray.pyx")
 sys.path.insert(1, '..')
 import ray
 import walls
