@@ -2,10 +2,9 @@ import sys
 import pygame
 import math
 import random
-from pygame.locals import *
-from ray import Ray
-from walls import Wall
 import json
+from walls import Wall
+from ray import Ray
 
 pygame.init()
 
@@ -22,8 +21,7 @@ except FileNotFoundError:
     width, height = 1280, 720
     ray_length = 50
     MAX_TRAIL_LENGTH = 3
-fpsClock = pygame.time.Clock()
-flags = HWSURFACE | DOUBLEBUF | SCALED | SRCALPHA
+flags = pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.SCALED | pygame.SRCALPHA
 screen = pygame.display.set_mode((width, height), flags)
 boundaries = []
 show = True
@@ -33,6 +31,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 font = pygame.sysfont.SysFont("helvetica", 50)
+clock = pygame.time.Clock()
 
 
 def point_dist(x1, y1, x2, y2):
@@ -58,21 +57,36 @@ def generate_boundaries():
 
 generate_boundaries()
 
+
+class CircleSprite(pygame.sprite.Sprite):
+    def __init__(self, color, radius):
+        super().__init__()
+        self.image = pygame.Surface((radius * 2, radius * 2), pygame.SRCALPHA)
+        pygame.draw.circle(self.image, color, (radius, radius), radius)
+        self.rect = self.image.get_rect()
+
+    def update(self):
+        self.rect.center = pygame.mouse.get_pos()
+
+
+circle_sprite = CircleSprite(WHITE, 30)
+all_sprites = pygame.sprite.Group(circle_sprite)
+
 while True:
     screen.fill(BLACK)
-    text = font.render("FPS: {:.2f}".format(fpsClock.get_fps()), True, WHITE)
+    text = font.render("FPS: {:.2f}".format(clock.get_fps()), True, WHITE)
     screen.blit(text, (10, 10))
 
     for event in pygame.event.get():
-        if event.type == QUIT:
+        if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        if event.type == MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             print(pygame.mouse.get_pos())
-        if event.type == KEYDOWN:
-            if event.key == K_RETURN:
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN:
                 show = not show
-            if event.key == K_q:
+            if event.key == pygame.K_q:
                 pygame.quit()
                 sys.exit()
 
@@ -81,7 +95,7 @@ while True:
 
     for i, pos in enumerate(trail):
         alpha = int(255 * (1 - i / MAX_TRAIL_LENGTH))
-        blur_surface = pygame.Surface((width, height), SRCALPHA)
+        blur_surface = pygame.Surface((width, height), pygame.SRCALPHA)
         pygame.draw.circle(blur_surface, (*WHITE, alpha), pos, 30)
         screen.blit(blur_surface, (0, 0))
 
@@ -108,6 +122,9 @@ while True:
     for boundary in boundaries:
         pygame.draw.line(screen, WHITE, boundary.start, boundary.end)
 
+    all_sprites.update()
+    all_sprites.draw(screen)
+
     pygame.display.flip()
     if fps is not None:
-        fpsClock.tick(fps)
+        clock.tick_busy_loop(fps)
